@@ -4,6 +4,12 @@
 
 Started this project just for a bit of fun, and to spice up my somewhat lackluster desk area. Don't expect the server code to be particularly efficent or secure - I only intend to use it on my LAN and I wrote it to 'just work.' In this repo you'll find the circuit diagram (hopefully correct), server code, and some example scripts (as you'd expect, inside the `/scripts/` folder.)
 
+Before running, use pip to install the following packages:
+
+- `pip3 install Flask rpi_ws281x adafruit-circuitpython-neopixel`
+
+To run the server, just navigate to the root directory and run `sudo python3 DynamicLEDServer.py` and visit port 5000 on the device's local IP from a web browser. (e.g. `10.0.1.63:5000`)
+
 I may make a "tutorial" video at some point if I feel like it, and would explain the repo more thoroughly there.
 
 ## Diagram

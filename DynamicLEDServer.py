@@ -59,7 +59,7 @@ def rdir():
 @app.route('/LED', methods=['GET'])
 def index():
   if request.method == 'GET':
-    if (request.remote_addr.startswith('10.0.')): # LAN
+    if (request.remote_addr.startswith('10.0.') or request.remote_addr.startswith('192.168.')): # LAN
       files = os.listdir('scripts/')
       files.remove('__init__.py')
       files.remove('__pycache__')

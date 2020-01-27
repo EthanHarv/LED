@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  background-image: url("/static/Background.png");
+  background-color: #005926;
+}
+
+.dropbtn {
+  background-color: #5C63FF;
+  color: white;
+  padding: 30px;
+  font-size: 50px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: center;
+  background-color: #f1f1f1;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  font-size: 30px;
+  color: black;
+  padding: 20px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #5C63FF;}
+</style>
+<title>LED Control Panel</title>
+</head>
+<body>
+	<center>
+		<div class="dropdown">
+			<button class="dropbtn">Choose Mode</button>
+			<div class="dropdown-content">
+				{% for file in files %}
+					<a href='LED?set={{file}}'>{{file}}</a>
+				{% endfor %}
+			</div>
+		</div>
+	</center>
+</body>
+</html>

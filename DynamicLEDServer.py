@@ -1,6 +1,5 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template, redirect
-from subprocess import Popen
 from threading import Thread
 import importlib
 import board

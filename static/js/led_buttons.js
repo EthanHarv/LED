@@ -22,9 +22,9 @@ function populateVars(vars)
   $(".vars").html("");
   for (i=0; i<vars.length; i++)
   {
-    if (vars[i] == "color")
+    if (vars[i] == "color") // TODO: Add more available variables
     {
-      $(".vars").append("<input id='colorinput1' value='rgb(0,255,0)' data-jscolor='{previewSize:60}'><br>"); // TODO: Change to allow for more than 1 color input
+      $(".vars").append("<input class='varINPUT varcolor' id='colorinput" + i + "' value='rgb(0,255,0)' data-jscolor='{previewSize:60}'><br>");
       jscolor.install()
     }
   }
@@ -33,8 +33,16 @@ function populateVars(vars)
 
 $(document).on("click", ".send", function()
 {
-  c = document.querySelector('#colorinput1').jscolor.channels;
-  $.get("LED", { set: "var_" + lastFile, vars: Math.floor(c.r) + "," + Math.floor(c.g) + "," + Math.floor(c.b) }) // TODO: Allow for more than one color
+  fVars = "";
+  $(".varINPUT").each(function(i, obj)
+  {
+    if ($(obj).hasClass('varcolor')){
+      c = document.querySelector("#" + $(obj).attr('id')).jscolor.channels;
+      fVars += Math.floor(c.r) + "," + Math.floor(c.g) + "," + Math.floor(c.b);
+    };
+    fVars += ","
+  });
+  $.get("LED", { set: "var_" + lastFile, vars: fVars });
 });
 
 

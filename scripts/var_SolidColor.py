@@ -7,5 +7,5 @@ import random
 
 def run(pixels, stop, var):
 	split = var.split(',')
-	pixels.fill((int(var[0]),int(var[1]),int(var[2])))
+	pixels.fill((int(split[0]), int(split[1]), int(split[2])))
 	pixels.show()

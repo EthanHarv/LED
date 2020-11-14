@@ -4,48 +4,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-  background-image: linear-gradient(90deg, #155799, #159957);
-  background-color: #159957;
-}
-
-.dropbtn {
-  background-color: #5C63FF;
-  color: white;
-  padding: 30px;
-  font-size: 50px;
-  border: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: center;
-  background-color: #f1f1f1;
-  min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  font-size: 30px;
-  color: black;
-  padding: 20px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #5C63FF;}
-</style>
+<link rel="stylesheet" href="/static/css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- You could replace this locally if you would like. -->
 <title>LED Control Panel</title>
 </head>
 <body>
@@ -54,10 +14,11 @@ body {
 			<button class="dropbtn">Choose Mode</button>
 			<div class="dropdown-content">
 				{% for file in files %}
-					<a href='LED?set={{file}}'>{{file}}</a>
+					<a class="selection" file="{{file[0]}}" vars="{{file[1]}}">{{file[0]}}</a>
 				{% endfor %}
 			</div>
 		</div>
 	</center>
+<script src="/static/js/led_buttons.js"></script>
 </body>
 </html>

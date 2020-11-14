@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template, redirect
+from urllib.parse import unquote
 from threading import Thread
 import importlib
 import board
@@ -15,7 +16,7 @@ ORDER = neopixel.GRB
 
 pixels = neopixel.NeoPixel(PIN, PIXEL_NUM, brightness=BRIGHTNESS, auto_write=False, pixel_order=ORDER)
 
-def callScript(stop, script, vars):
+def callScript(stop, script, vars = None):
   modname = 'scripts.' + script
   if not(script.endswith('.py')): # Append .py to request string if not present
     script = script + '.py'
@@ -28,6 +29,7 @@ def callScript(stop, script, vars):
     scr = importlib.import_module(modname)
     kill_thread = False
     if script.startswith('var_'):
+      print(vars)
       t2 = Thread(target = scr.run, args = (pixels, lambda: kill_thread, vars))
     else:
       t2 = Thread(target = scr.run, args = (pixels, lambda: kill_thread))
@@ -40,7 +42,7 @@ def callScript(stop, script, vars):
         print('terminated.')
         break
 
-def initTask(script, vars):
+def initTask(script, vars = None):
   global t1
   global stop_threads
   if t1 is not None:
@@ -68,7 +70,7 @@ def index():
       for x in range(len(files)):
         if files[x].startswith('var_'):
           with open('scripts/' + files[x]) as f:
-            fileVars = f.readline()
+            fileVars = f.readline().replace('#', '')
           files[x] = [files[x], fileVars.strip()]
         else:
           files[x] = [files[x], "None"]
@@ -77,7 +79,10 @@ def index():
           files[x][0] = files[x][0][4:]
       print(files)
       if ('set' in request.args):
-        initTask(request.args.get('set'), request.args.get('vars')) # Send the InitTask message to change LED color
+        if request.args.get('vars') is None:
+            initTask(request.args.get('set'))
+        else:
+          initTask(request.args.get('set'), request.args.get('vars')) # Send the InitTask message to change LED color
         print('Task fully sent')
       return render_template('index.html', files=files)
     else:

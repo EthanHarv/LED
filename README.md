@@ -8,7 +8,9 @@ Before running, use pip to install the following packages:
 
 - `pip3 install Flask rpi_ws281x adafruit-circuitpython-neopixel`
 
-To run the server, just navigate to the root directory and run `sudo python3 DynamicLEDServer.py` and visit port 5000 on the device's local IP from a web browser. (e.g. `10.0.1.63:5000`)
+As well as downloading [jscolor](https://jscolor.com/) and adding it to /static/js/
+
+To run the server, just navigate to the root directory and run `sudo python3 DynamicLEDServer.py` and go to the device's local IP from a web browser. (e.g. `10.0.1.63` or '192.168.2.56')
 
 I may make a "tutorial" video at some point if I feel like it, and would explain the repo more thoroughly there.
 

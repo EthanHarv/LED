@@ -15,19 +15,22 @@ ORDER = neopixel.GRB
 
 pixels = neopixel.NeoPixel(PIN, PIXEL_NUM, brightness=BRIGHTNESS, auto_write=False, pixel_order=ORDER)
 
-def callScript(stop, script):
+def callScript(stop, script, vars):
   modname = 'scripts.' + script
   if not(script.endswith('.py')): # Append .py to request string if not present
     script = script + '.py'
-  script = 'scripts/' + script
-  print('searching for file %s' % script)
-  if os.path.exists(script):
+  scriptPath = 'scripts/' + script
+  print('searching for file %s' % scriptPath)
+  if os.path.exists(scriptPath):
     print('found file')
     pixels.fill((0,0,0))
     pixels.show()
     scr = importlib.import_module(modname)
     kill_thread = False
-    t2 = Thread(target = scr.run, args = (pixels, lambda: kill_thread))
+    if script.startswith('var_'):
+      t2 = Thread(target = scr.run, args = (pixels, lambda: kill_thread, vars))
+    else:
+      t2 = Thread(target = scr.run, args = (pixels, lambda: kill_thread))
     t2.start()
     while True:
       if stop():
@@ -37,7 +40,7 @@ def callScript(stop, script):
         print('terminated.')
         break
 
-def initTask(script):
+def initTask(script, vars):
   global t1
   global stop_threads
   if t1 is not None:
@@ -45,7 +48,7 @@ def initTask(script):
     t1.join()
     print('killed previous thread')
   stop_threads = False
-  t1 = Thread(target = callScript, args = (lambda : stop_threads, script))
+  t1 = Thread(target = callScript, args = (lambda : stop_threads, script, vars))
   t1.start()
   print('started background process')
 
@@ -63,13 +66,22 @@ def index():
       files.remove('__init__.py')
       files.remove('__pycache__')
       for x in range(len(files)):
-        files[x] = files[x].replace('.py', '')
+        if files[x].startswith('var_'):
+          with open('scripts/' + files[x]) as f:
+            fileVars = f.readline()
+          files[x] = [files[x], fileVars.strip()]
+        else:
+          files[x] = [files[x], "None"]
+        files[x][0] = files[x][0].replace('.py', '')
+        if files[x][0].startswith('var_'):
+          files[x][0] = files[x][0][4:]
+      print(files)
       if ('set' in request.args):
-        initTask(request.args.get('set')) # Send the InitTask message to change LED color
+        initTask(request.args.get('set'), request.args.get('vars')) # Send the InitTask message to change LED color
         print('Task fully sent')
       return render_template('index.html', files=files)
     else:
       abort(401) # unauth error
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port="80")

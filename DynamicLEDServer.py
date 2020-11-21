@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template, redirect
+from gevent.pywsgi import WSGIServer
 from urllib.parse import unquote
 from threading import Thread
 import importlib
@@ -89,4 +90,5 @@ def index():
       abort(401) # unauth error
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port="80")
+    http_server = WSGIServer(('', 80), app)
+    http_server.serve_forever()

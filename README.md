@@ -6,7 +6,7 @@ Started this project just for a bit of fun, and to spice up my somewhat lacklust
 
 Before running, use pip to install the following packages:
 
-- `pip3 install Flask rpi_ws281x adafruit-circuitpython-neopixel`
+- `pip3 install Flask gevent rpi_ws281x adafruit-circuitpython-neopixel`
 
 As well as downloading [jscolor](https://jscolor.com/) and adding it to /static/js/
 

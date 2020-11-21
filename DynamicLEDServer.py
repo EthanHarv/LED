@@ -1,5 +1,7 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template, redirect
+from gevent import monkey
+monkey.patch_all()
 from gevent.pywsgi import WSGIServer
 from urllib.parse import unquote
 from threading import Thread
@@ -64,7 +66,8 @@ def rdir():
 @app.route('/LED', methods=['GET'])
 def index():
   if request.method == 'GET':
-    if (request.remote_addr.startswith('10.0.') or request.remote_addr.startswith('192.168.')): # LAN
+    print(request.remote_addr)
+    if (request.remote_addr[7:].startswith('10.0.') or request.remote_addr[7:].startswith('192.168.')): # LAN
       files = os.listdir('scripts/')
       files.remove('__init__.py')
       files.remove('__pycache__')
